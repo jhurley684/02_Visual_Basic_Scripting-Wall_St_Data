@@ -1,0 +1,205 @@
+Sub Wall_Street_Summary()
+
+ 'Run Macro on Each Worksheet
+
+    Dim iIndex As Integer
+    Dim ws As Excel.Worksheet
+
+    For iIndex = 1 To ActiveWorkbook.Worksheets.Count
+        Set ws = Worksheets(iIndex)
+        ws.Activate
+
+
+'Format Columns & Cells for easy reading
+'============================================================
+ Range("I:P").ColumnWidth = 18
+ Columns("J").NumberFormat = "###.00"
+ Columns("K").NumberFormat = "0.00%"
+ Columns("L").NumberFormat = "###,###,###,##0"
+ Range("P2").NumberFormat = "$##,###.00"
+ Range("P3").NumberFormat = "$##,###.00"
+ Range("P4").NumberFormat = "###,###,###,##0"
+
+
+
+
+       
+ 'Set Column Headers
+ '===============================================================
+ Cells(1, 9).Value = "Ticker"
+ Cells(1, 10).Value = "Yearly Change"
+ Cells(1, 11).Value = "Percent Change"
+ Cells(1, 12).Value = "Total Volume"
+ Cells(1, 15).Value = "Stock"
+ Cells(1, 16).Value = "Amount"
+ Cells(2, 14).Value = "Greatest % Increase"
+ Cells(3, 14).Value = "Greatest % Decrease"
+ Cells(4, 14).Value = "Greatest Volume"
+ 
+ 
+
+ 'Set a bunch of variables for tracking and calculating
+ '===============================================================
+ 
+ 'Set an initial variable for holding the ticker symbol
+  Dim ticker_symbol As String
+    ticker_symbol = Cells(2, 1).Value
+  
+  'Set an initial variable for holding the opening and closing prices
+   Dim opening As Double
+  'Dim closing As Double
+    opening = Cells(2, 3).Value
+    closing = Cells(2, 6).Value
+   
+  'Set an initial variable for percent_change
+  Dim percent_change As Double
+    percent_change = 0
+    
+  'Set an initial variable for the yearly price change
+  Dim price_change As Double
+    price_change = 0
+   
+  ' Set an initial Variable for holding the total_volume of a stock
+  Dim stock_volume As Double
+    stock_volume = Cells(2, 7)
+
+  ' Keep track of the location for each ticker_symbol in the summary table
+  Dim Summary_Table_Row As Integer
+    Summary_Table_Row = 2
+      
+  ' Set a variable to detect the last row of data
+  Dim last_row As Long
+    last_row = Cells(Rows.Count, 1).End(xlUp).Row
+    
+  ' Initiate a variable to hold greatest price increase
+  Dim g_increase As Double
+    g_increase = 0
+    
+  ' Initiate a variable to hold the greatest price decrease
+  Dim g_decrease As Double
+    g_decrease = 0
+    
+  ' Initiate a variable to hold the greatest trading volume
+  Dim g_volume As Double
+    g_volume = 0
+    
+    
+ 
+ ' Loop through all trading dates
+'===========================================================================
+   
+    For i = 2 To last_row
+                  
+        ' Compare current ticker to next ticker, if changing then do stuff
+        If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+         
+            ' Assign current ticker to new ticker_symbol
+            ticker_symbol = Cells(i + 1, 1).Value
+                                                
+            'assign closing price to closing (used later to calc)
+            closing = Cells(i, 6).Value
+                   
+            'calculate yearly change
+            yearly_change = (closing - opening)
+            
+            
+            'Test for positive change and store greates increase
+            If yearly_change > 0 And yearly_change > g_increase Then
+              
+              g_increase = yearly_change
+              
+              'Print greatest increase to Summary2
+              Cells(2, 16).Value = g_increase
+              Cells(2, 15).Value = Cells(i, 1).Value
+              
+            End If
+         
+             'Test for negative change and store greatest decrease
+            If yearly_change < 0 And yearly_change < g_decrease Then
+             
+              g_decrease = yearly_change
+              
+              'Then print to summary2 table
+              Cells(3, 16).Value = g_decrease
+              Cells(3, 15).Value = Cells(i, 1).Value
+              
+            End If
+            
+            
+            'If yearly change is >= to 0 make cell in summary table...
+            '... green, otherwise make cell red
+            
+            If yearly_change >= 0 Then
+            
+                    Range("J" & Summary_Table_Row).Interior.ColorIndex = 4
+                    Range("J" & Summary_Table_Row).Value = yearly_change
+            Else
+                    Range("J" & Summary_Table_Row).Interior.ColorIndex = 3
+                    Range("J" & Summary_Table_Row).Value = yearly_change
+            End If
+         
+         
+            ' Test to make sure that percentage calc will be valid
+            If closing = 0 Or opening = 0 Then
+              Range("K" & Summary_Table_Row).Value = "NA"
+            
+            Else
+            
+              'calculate the percent change and then print to the summary
+              percent_change = (closing - opening) / opening
+              Range("K" & Summary_Table_Row).Value = percent_change
+            
+            End If
+                        
+            ' resetopening opening to the next open price
+            opening = Cells(i + 1, 3).Value
+            
+            
+            'Add the total volume amount to stock_volume & print to summary
+            stock_volume = stock_volume + Cells(i, 7)
+            Range("L" & Summary_Table_Row).Value = stock_volume
+            
+            
+             'Test for largest volume and store in g_volume
+             If stock_volume > g_volume Then
+                g_volume = stock_volume
+                
+                'Print in Summary2
+                Cells(4, 16).Value = g_volume
+                Cells(4, 15).Value = Cells(i, 1).Value
+            
+             End If
+                          
+            
+            'reset stock volume counter
+            stock_volume = 0
+            
+           
+            ' Add one to the summary table row
+            Summary_Table_Row = Summary_Table_Row + 1
+        
+            
+         Else 'If the ticker symbol isn't changing keep doing this...
+         
+         
+            'Total the stock volume per stock ticker
+            stock_volume = stock_volume + Cells(i, 7).Value
+                        
+            'Print the ticker symbol in the summary
+            Range("I" & Summary_Table_Row).Value = ticker_symbol
+         
+         
+         End If
+            
+        
+    Next i
+
+ Next iIndex
+
+
+
+End Sub
+
+
+
+

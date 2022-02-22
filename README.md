@@ -1,4 +1,4 @@
-# VBA-challenge
+# VBA- Challenge Notes
 This contains the Homework 2 assignment about WallStreet Data.
 
 I completed first part of the assignment:

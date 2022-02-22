@@ -20,3 +20,7 @@ I had to create a process to solve a divide by 0 problem presented by some of th
 I also added headers, formated columns & some cells to make the summaries easier to read.
 
 
+# VBA - Challenge Directions
+
+
+

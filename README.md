@@ -1,8 +1,8 @@
 # VBA- Challenge Notes
 This contains the Homework 2 assignment about WallStreet Data.
 
-I completed first part of the assignment:
-*  Ticker Symbol
+Assignment:
+*  Per Ticker Symboldo accomplish the following: 
 *  Yearly Change - Positive in green, negative in red
 *  Total stock volume 
 *  Each in their own columns
@@ -10,8 +10,8 @@ I completed first part of the assignment:
 
 Bonus
 ======================================================
-I was also able to complete the Bonus work of providing "Greatest % increase",
-"Greatest % decrease", and "Greatest total volume".  Each area footed out correctly.
+Provide the "Greatest % increase", "Greatest % decrease", and "Greatest total volume". 
+Each area footed out correctly.
 
 My script ran successfully on every page.  In order for it to work on every page,
 I had to create a process to solve a divide by 0 problem presented by some of the data 

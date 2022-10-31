@@ -2,7 +2,7 @@
 This contains the Homework 2 assignment about WallStreet Data.
 
 Assignment:
-*  Per Ticker Symboldo accomplish the following: 
+*  Per Ticker Symbol, accomplish the following: 
 *  Yearly Change - Positive in green, negative in red
 *  Total stock volume 
 *  Each in their own columns
